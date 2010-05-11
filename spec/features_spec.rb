@@ -8,8 +8,22 @@ describe "Integration features" do
     user.should be_a_draft
   end
   
+  it "should allow trying to save the object and saving as a draft if it fails" do
+    user = User.new :email => 'joe@example.com'
+    user.should_not be_valid
+    user.save_or_draft
+    user.should be_a_draft
+  end
+  
   it "should create a record as draft and skip validations" do
     user = User.create_as_draft :email => 'joe@example.com'
+    user.should be_instance_of(User)
+    user.should_not be_a_new_record
+    user.should be_a_draft
+  end
+
+  it "should allow trying to create a record and saving as a draft if it fails" do
+    user = User.create_or_draft :email => 'joe@example.com'
     user.should be_instance_of(User)
     user.should_not be_a_new_record
     user.should be_a_draft
@@ -23,5 +37,5 @@ describe "Integration features" do
   it "should provide a version of ActiveRecord::Base#find that will look for drafts" do
     user = User.create_as_draft :email => 'joe@example.com'
     User.find_drafts(:all).should include(user)
-  end
+  end  
 end
