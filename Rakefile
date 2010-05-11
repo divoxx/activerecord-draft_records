@@ -4,14 +4,19 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "activerecord-draft_records"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "divoxx@gmail.com"
-    gem.homepage = "http://github.com/divoxx/activerecord-draft_records"
-    gem.authors = ["Rodrigo Kochenburger"]
+    gem.name        = "activerecord-draft_records"
+    gem.summary     = "Add support for draft models (incomplete models) to ActiveRecord"
+    gem.email       = "divoxx@gmail.com"
+    gem.homepage    = "http://github.com/divoxx/activerecord-draft_records"
+    gem.authors     = ["Rodrigo Kochenburger"]
+    gem.description = <<-DESC
+Sometimes it's necessary to store incomplete records, without fullfilling all validations, to complete
+and then validate the record. ActiveRecord::DraftRecords allows you to persist an record even if it's
+invalid by tagging it as a draft.
+    DESC
+
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_development_dependency "database_cleaner", ">= 0.5.2"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
