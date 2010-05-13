@@ -15,6 +15,13 @@ describe "Integration features" do
     user.should be_a_draft
   end
   
+  it "should not save the record as draft if validations pass when calling save_or_draft" do
+    user = User.new :email => 'joe@example.com', :username => 'joe'
+    user.should be_valid
+    user.save_or_draft
+    user.should_not be_a_draft
+  end
+  
   it "should create a record as draft and skip validations" do
     user = User.create_as_draft :email => 'joe@example.com'
     user.should be_instance_of(User)

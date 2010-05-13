@@ -15,14 +15,14 @@ DatabaseCleaner.strategy = :transaction
 # Define the database schema
 ActiveRecord::Schema.define do
   create_table :users do |t|
-    t.string :name, :username, :email
+    t.string :username, :email
     t.boolean :draft
   end
 end
 
 class User < ActiveRecord::Base
   include ActiveRecord::DraftRecords
-  validates_presence_of :name, :username, :email
+  validates_presence_of :username, :email
 end
 
 Spec::Runner.configure do |config|
