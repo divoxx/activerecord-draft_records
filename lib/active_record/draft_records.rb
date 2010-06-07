@@ -44,8 +44,9 @@ module ActiveRecord
       
       if self.valid?
         save
+      elsif self.draft = is_draft
+        save(false)
       else
-        self.draft = is_draft
         false
       end
     end

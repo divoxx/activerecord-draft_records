@@ -16,6 +16,7 @@ DatabaseCleaner.strategy = :transaction
 ActiveRecord::Schema.define do
   create_table :users do |t|
     t.string :username, :email
+    t.integer :age
     t.boolean :draft
   end
 end

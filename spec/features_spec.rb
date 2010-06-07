@@ -49,15 +49,25 @@ describe "Integration features" do
   it "should save a record and attempt to transform into a non-draft" do
     user = User.create_as_draft :email => 'joe@example.com'
     user.username = 'joe'
-    user.save_and_attempt_to_undraft
+    user.save_and_attempt_to_undraft.should be(true)
     user.should_not be_draft
     user.should_not be_changed
   end
 
   it "should save a record and attempt to transform into a non-draft but fail if validation fails" do
     user = User.create_as_draft :email => 'joe@example.com'
-    user.save_and_attempt_to_undraft
+    user.age = 18
+    user.save_and_attempt_to_undraft.should be(true)
     user.should be_draft
     user.should_not be_changed
+    user.age.should == 18
+  end
+  
+  it "should not transform a normal record in draft when calling save_and_attempt_to_undraft" do
+    user = User.create :email => 'joe@example.com', :username => 'joe'
+    user.username = nil
+    user.save_and_attempt_to_undraft.should be(false)
+    user.should_not be_draft
+    user.should be_changed
   end
 end
