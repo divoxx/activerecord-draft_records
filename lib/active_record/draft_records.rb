@@ -38,6 +38,18 @@ module ActiveRecord
       end
     end
     
+    # Save the record and, if it is a draft, attempt to transform it in a normal (non-draft) record.
+    def save_and_attempt_to_undraft
+      self.draft, is_draft = false, self.draft
+      
+      if self.valid?
+        save
+      else
+        self.draft = is_draft
+        false
+      end
+    end
+    
     # Save the record as a draft, setting the record attribute 'draft' to true
     # and saving the record ignoring the validations.
     def save_as_draft

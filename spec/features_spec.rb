@@ -44,5 +44,20 @@ describe "Integration features" do
   it "should provide a version of ActiveRecord::Base#find that will look for drafts" do
     user = User.create_as_draft :email => 'joe@example.com'
     User.find_drafts(:all).should include(user)
-  end  
+  end
+  
+  it "should save a record and attempt to transform into a non-draft" do
+    user = User.create_as_draft :email => 'joe@example.com'
+    user.username = 'joe'
+    user.save_and_attempt_to_undraft
+    user.should_not be_draft
+    user.should_not be_changed
+  end
+
+  it "should save a record and attempt to transform into a non-draft but fail if validation fails" do
+    user = User.create_as_draft :email => 'joe@example.com'
+    user.save_and_attempt_to_undraft
+    user.should be_draft
+    user.should_not be_changed
+  end
 end
