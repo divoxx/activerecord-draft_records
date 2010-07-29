@@ -24,6 +24,7 @@ end
 class User < ActiveRecord::Base
   include ActiveRecord::DraftRecords
   validates_presence_of :username, :email
+  validates_uniqueness_of :username, :email, :scope => :draft
 end
 
 Spec::Runner.configure do |config|

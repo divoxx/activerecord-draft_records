@@ -38,16 +38,21 @@ module ActiveRecord
       end
     end
     
+    # Override valid? to automatically and temporarily set it as a draft for the validation.
+    def valid?
+      self.draft, is_draft = false, self.draft
+      super
+    ensure
+      self.draft = is_draft
+    end
+    
     # Save the record and, if it is a draft, attempt to transform it in a normal (non-draft) record.
     def save_and_attempt_to_undraft
-      self.draft, is_draft = false, self.draft
-      
-      if self.valid?
-        save
-      elsif self.draft = is_draft
+      if self.draft?
+        self.draft = false if self.valid?
         save(false)
       else
-        false
+        save
       end
     end
     

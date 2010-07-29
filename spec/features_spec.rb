@@ -70,4 +70,13 @@ describe "Integration features" do
     user.should_not be_draft
     user.should be_changed
   end
+  
+  it "should validate object as not draft" do
+    User.create :email => 'joe@example.com', :username => 'joe'
+    user = User.new :username => 'joe'
+    user.save_as_draft.should be_true
+    user.should_not be_valid
+    user.errors.on(:username).should_not be_blank
+    user.errors.on(:username).should include("has already been taken")
+  end
 end
