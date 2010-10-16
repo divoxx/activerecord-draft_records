@@ -39,7 +39,7 @@ module ActiveRecord
     end
     
     # Override valid? to automatically and temporarily set it as a draft for the validation.
-    def valid?
+    def valid?(context = nil)
       self.draft, is_draft = false, self.draft
       super
     ensure
@@ -50,7 +50,7 @@ module ActiveRecord
     def save_and_attempt_to_undraft
       if self.draft?
         self.draft = false if self.valid?
-        save(false)
+        save(:validate => false)
       else
         save
       end
@@ -60,7 +60,7 @@ module ActiveRecord
     # and saving the record ignoring the validations.
     def save_as_draft
       self.draft = true
-      save(false)
+      save(:validate => false)
     end
     
     # Attempt to save the record, if any validation fails, save it as a draft.
