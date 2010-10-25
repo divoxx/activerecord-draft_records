@@ -38,7 +38,7 @@ module ActiveRecord
       end
     end
     
-    # Override valid? to automatically and temporarily set it as a draft for the validation.
+    # Override valid? to automatically and temporarily set it as not a draft for the validation.
     def valid?(context = nil)
       self.draft, is_draft = false, self.draft
       super
@@ -51,6 +51,7 @@ module ActiveRecord
       if self.draft?
         self.draft = false if self.valid?
         save(:validate => false)
+        !self.draft
       else
         save
       end
