@@ -21,7 +21,7 @@ module ActiveRecord
       end
       
       # Attempt to create the record, if it fails, save it as a draft
-      def create_or_draft(attributes = {}, &block)
+      def create_or_draft(attributes = {}, options = {}, &block)
         if attributes.is_a?(Array)
            attributes.collect { |attr| create_as_draft(attr, &block) }
          else
@@ -47,10 +47,10 @@ module ActiveRecord
     end
     
     # Save the record and, if it is a draft, attempt to transform it in a normal (non-draft) record.
-    def save_and_attempt_to_undraft
+    def save_and_attempt_to_undraft(options = {})
       if self.draft?
         self.draft = false if self.valid?
-        save(:validate => false)
+        save(options.merge(:validate => false))
         !self.draft
       else
         save
@@ -65,8 +65,8 @@ module ActiveRecord
     end
     
     # Attempt to save the record, if any validation fails, save it as a draft.
-    def save_or_draft
-      save || save_as_draft
+    def save_or_draft(options = {})
+      save(options) || save_as_draft
     end
   end
 end
