@@ -23,11 +23,11 @@ module ActiveRecord
       # Attempt to create the record, if it fails, save it as a draft
       def create_or_draft(attributes = {}, options = {}, &block)
         if attributes.is_a?(Array)
-           attributes.collect { |attr| create_as_draft(attr, &block) }
+           attributes.collect { |attr| create_or_draft(attr, &block) }
          else
            object = new(attributes)
            yield(object) if block_given?
-           object.save_or_draft
+           object.save_or_draft(options)
            object
          end        
       end
